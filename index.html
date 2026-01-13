@@ -148,6 +148,7 @@
 			"Łańcuch dostaw",
 			"Zysk operacyjny",
 			"podziękulski",
+			"zysk ujemny",
         ];
 
         let markedCells = new Set();
@@ -252,7 +253,7 @@
         function updateStatus() {
             const markedCount = markedCells.size; const statusEl = document.getElementById('status');
             if (markedCount === TOTAL_CELLS + 1) { statusEl.innerHTML = '🏆 DZIĘKUJĘ CI ZA TĘ GRĘ! Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆'; statusEl.className = 'status full-bingo'; }
-            else { statusEl.textContent = markedCount >= 12 ? `Zaznaczono ${markedCount-1} pól (FREE)` : 'Dziękuję Ci za to zaznaczenie, graj dalej.'; }
+            else { statusEl.textContent = markedCount >= 12 ? `Zaznaczono ${markedCount-1} pól, dziękuję Ci!` : 'Dziękuję Ci za to zaznaczenie, graj dalej.'; }
         }
 
         // Pełna loadProgress
