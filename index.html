@@ -126,31 +126,31 @@
 
     <script>
         const phrases = [
+            "Musimy działać bardziej proaktywnie w tym obszarze.",
             "synergia",
-            "strategiczny temat dla zarządu",
-            "dowiezienie rezultatów",
-            "zeskalować na inne rynki",
-            "wrócimy do tematu w kolejnym kwartale",
-            "dziękuję Ci za to pytanie",
-            "a który to Andrzej?",
-            "mam pytanie, tak spontanicznie.",
-            "i co tam? Jesz?",
+            "To jest temat strategiczny z perspektywy zarządu.",
+            "Potrzebujemy dowiezienia rezultatów.",
+            "Zastanówmy się, jak możemy to zeskalować na inne rynki.",
+            "Na ten moment zostawmy to, do tematu wrócimy w kolejnym kwartale.",
+            "Dziękuję Ci za to pytanie.",
+            "A który to Andrzej?",
+            "Mam pytanie, tak spontanicznie.",
+            "I co tam? Jesz?",
             "Krawiec zadaje pytanie po polsku do CEO",
-            "Daniel mówi o CTX'",
+            "Daniel 'sprzedałem ostatnio CTX-a'",
             "Koliński narzeka za zbyt duży budżet",
             "Białystok ma za duży budżet",
-            "kwasiak",
+            "KWASIAK",
             "mapowanie procesów",
             "tego nie da się sprzedawać",
             "ewolucja a nie rewolucja",
             "konkurencja ma taniej",
-            "jaka branża?",
-            "firma naszych byłych kolegów...",
+            "Jaka branża?",
+            "Firma naszych byłych kolegów...",
             "Łańcuch dostaw",
             "Zysk operacyjny",
             "podziękulski",
             "zysk ujemny",
-			"Koliński sugeruje Polagrę"
         ];
 
         let markedCells = new Set();
@@ -183,28 +183,32 @@
          */
         function fitTextToCell(textEl) {
             const container = textEl.parentElement;
-            const cell = container.parentElement;
-            const cellSize = cell.getBoundingClientRect();
             
-            // Zmniejsz padding by maksymalizować dostępne miejsce
-            const padding = 4;
-            const maxWidth = cellSize.width - padding;
-            const maxHeight = cellSize.height - padding;
+            // Zmniejsz line-height dla długich tekstów
+            const text = textEl.textContent;
+            if (text.length > 50) {
+                textEl.style.lineHeight = '1.0';
+            } else if (text.length > 30) {
+                textEl.style.lineHeight = '1.05';
+            }
             
             let fontSize = 12;
             textEl.style.fontSize = fontSize + 'px';
             
             // Sprawdzaj zarówno overflow wysokości jak i szerokości
             let attempts = 0;
-            const maxAttempts = 200;
+            const maxAttempts = 300;
             
             while (attempts < maxAttempts) {
+                // Wymuś reflow
                 const scrollHeight = textEl.scrollHeight;
                 const scrollWidth = textEl.scrollWidth;
+                const containerHeight = container.clientHeight;
+                const containerWidth = container.clientWidth;
                 
                 // Jeśli nie mieści się w wysokości lub szerokości
-                if (scrollHeight > maxHeight || scrollWidth > maxWidth) {
-                    fontSize -= 0.25;
+                if (scrollHeight > containerHeight - 4 || scrollWidth > containerWidth - 4) {
+                    fontSize -= 0.15;
                     textEl.style.fontSize = fontSize + 'px';
                     attempts++;
                 } else {
@@ -216,12 +220,15 @@
             if (textEl.textContent.includes('WOLNY')) {
                 fontSize = 14;
                 textEl.style.fontSize = fontSize + 'px';
+                textEl.style.lineHeight = '1.1';
                 let attempts2 = 0;
                 while (attempts2 < maxAttempts) {
                     const scrollHeight = textEl.scrollHeight;
                     const scrollWidth = textEl.scrollWidth;
-                    if (scrollHeight > maxHeight || scrollWidth > maxWidth) {
-                        fontSize -= 0.25;
+                    const containerHeight = container.clientHeight;
+                    const containerWidth = container.clientWidth;
+                    if (scrollHeight > containerHeight - 4 || scrollWidth > containerWidth - 4) {
+                        fontSize -= 0.15;
                         textEl.style.fontSize = fontSize + 'px';
                         attempts2++;
                     } else {
@@ -255,8 +262,11 @@
             // Wielokrotne wywołania by upewnić się, że font jest dostosowany na wszystkich urządzeniach
             requestAnimationFrame(() => {
                 fitTextToCell(textWrap);
-                setTimeout(() => fitTextToCell(textWrap), 100);
             });
+            
+            // Dodatkowe opóźnienia dla pewności
+            setTimeout(() => fitTextToCell(textWrap), 50);
+            setTimeout(() => fitTextToCell(textWrap), 150);
             
             return cell;
         }
@@ -289,6 +299,13 @@
                 container.appendChild(createCell(i, orderedPhrases)); 
             }
             loadProgress();
+            
+            // Ponowne dostosowanie po załadowaniu
+            setTimeout(() => {
+                document.querySelectorAll('.text-wrap').forEach(el => {
+                    fitTextToCell(el);
+                });
+            }, 200);
         }
 
         function toggleCell(index) {
