@@ -146,8 +146,6 @@
             "tego nie da się sprzedawać",
             "ewolucja a nie rewolucja",
             "konkurencja ma taniej",
-            "test",
-            "test"
         ];
 
         let markedCells = new Set();
