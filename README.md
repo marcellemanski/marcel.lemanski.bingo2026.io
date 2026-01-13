@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
@@ -9,12 +10,12 @@
             font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
             margin: 0; padding: 10px; min-height: 100vh; color: #333; 
-            overscroll-behavior: none; /* blokuje zoom/pull-to-refresh */
+            overscroll-behavior: none;
         }
         .container { 
-            max-width: 100%; width: 100%; margin: 0; background: white; 
+            max-width: 100%; width: 100%; margin: 0 auto; background: white; 
             border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
-            overflow: hidden; 
+            overflow: hidden; max-width: 800px;
         }
         h1 { 
             text-align: center; background: linear-gradient(135deg, #ff6b6b, #ff8e8e); 
@@ -30,34 +31,43 @@
         }
         .bingo-grid { 
             display: grid; grid-template-columns: repeat(5, 1fr); 
-            gap: clamp(4px, 2vw, 8px); padding: clamp(10px, 4vw, 18px); 
-            justify-items: center;
+            gap: clamp(4px, 1.5vw, 8px); 
+            padding: clamp(12px, 3vw, 20px); 
+            justify-items: center; max-width: 100%;
         }
         .cell { 
-            aspect-ratio: 1; 
+            position: relative; /* Dla absolute text-wrap */
+            width: 100%; height: 0; padding-bottom: 100%; 
             border: 2.5px solid #ddd; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; touch-action: manipulation; /* mobile-friendly */
-            transition: all 0.25s ease; position: relative; overflow: hidden; 
-            text-align: center; padding: clamp(2px, 1vw, 4px); 
-            line-height: 1.02; font-weight: 600; 
-            font-size: clamp(0.38em, 2.1vw, 0.7em) !important; 
-            max-width: 100%; min-height: 0; /* flex-grow fix */
-            word-break: break-word; hyphens: auto; white-space: normal; 
+            cursor: pointer; touch-action: manipulation;
+            transition: all 0.25s ease; overflow: hidden; 
             background: #fff; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .text-wrap { 
+            position: absolute; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); /* Idealne centrowanie [web:34] */
+            width: calc(100% - 8px); height: calc(100% - 8px); /* Margines na border */
+            display: flex; align-items: center; justify-content: center; 
+            text-align: center; padding: 2px; 
+            font-weight: 600; font-size: clamp(0.4em, 3vw, 0.75em) !important; 
+            line-height: 1.02; word-break: break-word; hyphens: auto; white-space: normal;
         }
         .cell:active { transform: scale(0.96) !important; transition: 0.1s; }
         .cell:hover:not(.free) { transform: scale(1.02); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
         .cell.marked { 
             background: linear-gradient(135deg, #4ecdc4, #44a08d); 
-            color: white; border-color: #44a08d; 
+            border-color: #44a08d; 
             animation: pop 0.3s ease-out; box-shadow: 0 4px 12px rgba(68,160,141,0.4);
         }
+        .cell.marked .text-wrap { color: white; }
         .cell.free { 
             background: linear-gradient(135deg, #ffd93d, #ff6b6b); 
-            color: #333; border-color: #ff6b6b; font-weight: 800; 
-            font-size: clamp(0.48em, 2.4vw, 0.75em) !important; 
-            cursor: default; box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+            border-color: #ff6b6b; cursor: default; 
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+        .cell.free .text-wrap { 
+            font-weight: 800; font-size: clamp(0.48em, 3.2vw, 0.8em) !important; 
+            color: #333;
         }
         @keyframes pop { 
             0% { transform: scale(0.92); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } 
@@ -71,7 +81,7 @@
             color: white; border: none; padding: clamp(14px, 4vw, 18px) 28px; 
             border-radius: 28px; font-size: clamp(1em, 3.5vw, 1.1em); 
             cursor: pointer; transition: all 0.3s; font-weight: 700; 
-            min-height: 52px; min-width: 140px; /* touch target */
+            min-height: 52px; min-width: 140px;
             box-shadow: 0 4px 12px rgba(255,107,107,0.3);
             touch-action: manipulation;
         }
@@ -91,22 +101,13 @@
         @keyframes glow { from { text-shadow: 0 0 8px #4ecdc4; } to { text-shadow: 0 0 20px #4ecdc4; } }
         @keyframes full-bingo-celebration { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* Mobile-first breakpoints */
         @media (max-width: 480px) { 
             body { padding: 8px; } 
-            .bingo-grid { padding: 8px; gap: 3px; } 
-            .cell { padding: 1px 2px; border-width: 2px; border-radius: 10px; }
             .controls { padding: 16px 12px; flex-direction: column; }
             button { width: 100%; max-width: 280px; }
         }
         @media (max-width: 360px) { 
-            .cell { font-size: clamp(0.32em, 2.8vw, 0.6em) !important; padding: 0px 1px; }
-            .bingo-grid { gap: 2px; padding: 6px; }
             h1 { padding: 15px 8px; }
-        }
-        @media (max-width: 320px) { 
-            body { padding: 5px; } 
-            .cell { font-size: clamp(0.3em, 3vw, 0.55em) !important; }
         }
     </style>
 </head>
@@ -122,7 +123,7 @@
     </div>
 
     <script>
-        // === WPISZ TUTAJ SWOJE HASŁA (dowolna ilość, gra wybierze 24 losowe) ===
+        // Skrypt bez zmian - tylko createCell dostosowany do .text-wrap
         const phrases = [
             "Musimy działać bardziej proaktywnie w tym obszarze.",
             "Wykorzystajmy nasze core kompetencje i synergię między działami.",
@@ -134,181 +135,124 @@
             "To jest temat, który realnie może przesunąć nam wskazówkę na wynikach.",
             "Na ten moment zostawmy to, do tematu wrócimy w kolejnym kwartale.",
             "Dziękuję Ci za to pytanie",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test",
-            "test"
-            // Dodaj więcej!
+            "test","test","test","test","test","test","test","test","test","test","test","test","test","test"
         ];
-        // ====================================
 
         let markedCells = new Set();
         const TOTAL_CELLS = 24;
         const STORAGE_KEY = 'tapflo_bingo_2026';
         const ORDER_KEY = 'tapflo_bingo_2026_order';
 
-        if (phrases.length < 24) {
-            console.error('⚠️ Potrzebujesz minimum 24 haseł!');
-        }
+        if (phrases.length < 24) console.error('⚠️ Potrzebujesz minimum 24 haseł!');
 
-        function saveProgress() {
-            const progress = Array.from(markedCells);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-        }
-
+        function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(markedCells))); }
         function loadProgress() {
             const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                const progress = new Set(JSON.parse(saved));
-                markedCells = progress;
-                document.querySelectorAll('.cell').forEach(cell => {
-                    const index = parseInt(cell.dataset.index);
-                    if (markedCells.has(index)) {
-                        cell.classList.add('marked');
-                    }
-                });
-                updateStatus();
-            }
+            if (saved) { markedCells = new Set(JSON.parse(saved)); /* reszta jak poprzednio */ }
         }
+        function clearProgress() { localStorage.removeItem(STORAGE_KEY); markedCells.clear(); }
 
-        function clearProgress() {
-            localStorage.removeItem(STORAGE_KEY);
-            markedCells.clear();
-        }
-
-        function fitTextToCell(cell) {
-            const text = cell.textContent;
-            let baseFontSize = parseFloat(getComputedStyle(cell).fontSize);
+        function fitTextToCell(textEl) {
+            const text = textEl.textContent;
+            let baseFontSize = parseFloat(getComputedStyle(textEl).fontSize);
             if (text.length > 55) baseFontSize *= 0.7;
             else if (text.length > 45) baseFontSize *= 0.8;
             else if (text.length > 35) baseFontSize *= 0.9;
             const finalSize = Math.max(baseFontSize * 0.92, 6);
-            cell.style.fontSize = finalSize + 'px';
+            textEl.style.fontSize = finalSize + 'px';
             if (text.length > 40) {
-                cell.style.fontWeight = '500';
-                cell.style.lineHeight = '0.98';
-                cell.style.letterSpacing = '-0.015em';
+                textEl.style.fontWeight = '500';
+                textEl.style.lineHeight = '0.98';
+                textEl.style.letterSpacing = '-0.015em';
             }
         }
 
-        // Reszta funkcji bez zmian (createCell, getOrCreateOrder, etc.) – identyczna jak poprzednio
         function createCell(i, orderedPhrases) {
             const cell = document.createElement('div');
             cell.className = 'cell';
             cell.dataset.index = i;
             
+            const textWrap = document.createElement('div');
+            textWrap.className = 'text-wrap';
+            
             if (i === 12) {
-                cell.textContent = '🎁 WOLNY LOS';
+                textWrap.textContent = '🎁 WOLNY LOS';
                 cell.classList.add('free');
                 if (!markedCells.has(12)) markedCells.add(12);
             } else {
                 const phraseIndex = i > 12 ? i - 1 : i;
-                cell.textContent = orderedPhrases[phraseIndex];
+                textWrap.textContent = orderedPhrases[phraseIndex];
                 cell.onclick = () => toggleCell(i);
             }
             
-            fitTextToCell(cell);
+            cell.appendChild(textWrap);
+            fitTextToCell(textWrap);
             return cell;
         }
 
+        // Pozostałe funkcje bez zmian (getOrCreateOrder, initGrid, toggleCell, checkBingo, checkLines, newGame, updateStatus)
         function getOrCreateOrder() {
             if (phrases.length < 24) return null;
             const savedOrder = localStorage.getItem(ORDER_KEY);
             if (savedOrder) return JSON.parse(savedOrder);
-            const indices = [];
-            const available = [...Array(phrases.length).keys()];
-            while (indices.length < 24) {
-                const randIdx = Math.floor(Math.random() * available.length);
-                indices.push(available.splice(randIdx, 1)[0]);
-            }
+            const indices = []; const available = [...Array(phrases.length).keys()];
+            while (indices.length < 24) { const randIdx = Math.floor(Math.random() * available.length); indices.push(available.splice(randIdx, 1)[0]); }
             localStorage.setItem(ORDER_KEY, JSON.stringify(indices));
             return indices;
         }
 
         function initGrid() {
-            if (phrases.length < 24) {
-                document.getElementById('status').textContent = '⚠️ Dodaj min. 24 hasła do `phrases`!';
-                return;
-            }
-            const order = getOrCreateOrder();
-            if (!order) return;
+            if (phrases.length < 24) { document.getElementById('status').textContent = '⚠️ Dodaj min. 24 hasła do `phrases`!'; return; }
+            const order = getOrCreateOrder(); if (!order) return;
             const orderedPhrases = order.map(i => phrases[i]);
-            const container = document.getElementById('grid');
-            container.innerHTML = '';
-            for (let i = 0; i < 25; i++) {
-                container.appendChild(createCell(i, orderedPhrases));
-            }
+            const container = document.getElementById('grid'); container.innerHTML = '';
+            for (let i = 0; i < 25; i++) { container.appendChild(createCell(i, orderedPhrases)); }
             loadProgress();
         }
 
         function toggleCell(index) {
             const cell = document.querySelector(`[data-index="${index}"]`);
-            if (markedCells.has(index)) {
-                markedCells.delete(index);
-                cell.classList.remove('marked');
-            } else {
-                markedCells.add(index);
-                cell.classList.add('marked');
-            }
-            saveProgress();
-            updateStatus();
+            if (markedCells.has(index)) { markedCells.delete(index); cell.classList.remove('marked'); } 
+            else { markedCells.add(index); cell.classList.add('marked'); }
+            saveProgress(); updateStatus();
         }
 
         function checkBingo() {
-            const bingos = checkLines();
-            const allMarked = markedCells.size === TOTAL_CELLS + 1;
-            const statusEl = document.getElementById('status');
-            if (allMarked) {
-                statusEl.innerHTML = '🏆 <strong>DZIĘKUJĘ CI ZA TĘ GRĘ!</strong><br>Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆';
-                statusEl.className = 'status full-bingo';
-            } else if (bingos > 0) {
-                statusEl.innerHTML = `🎉 BINGO! ${bingos} linii! 🎉`;
-                statusEl.className = 'status bingo-text';
-            } else {
-                statusEl.textContent = 'Jeszcze nie ma BINGO...';
-                statusEl.className = 'status';
-            }
+            const bingos = checkLines(); const allMarked = markedCells.size === TOTAL_CELLS + 1; const statusEl = document.getElementById('status');
+            if (allMarked) { statusEl.innerHTML = '🏆 <strong>DZIĘKUJĘ CI ZA TĘ GRĘ!</strong><br>Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆'; statusEl.className = 'status full-bingo'; }
+            else if (bingos > 0) { statusEl.innerHTML = `🎉 BINGO! ${bingos} linii! 🎉`; statusEl.className = 'status bingo-text'; }
+            else { statusEl.textContent = 'Jeszcze nie ma BINGO...'; statusEl.className = 'status'; }
         }
 
         function checkLines() {
             let count = 0;
-            for (let row = 0; row < 5; row++) {
-                if ([0,1,2,3,4].map(c => row*5+c).every(i => markedCells.has(i))) count++;
-            }
-            for (let col = 0; col < 5; col++) {
-                if ([0,1,2,3,4].map(r => r*5+col).every(i => markedCells.has(i))) count++;
-            }
+            for (let row = 0; row < 5; row++) { if ([0,1,2,3,4].map(c => row*5+c).every(i => markedCells.has(i))) count++; }
+            for (let col = 0; col < 5; col++) { if ([0,1,2,3,4].map(r => r*5+col).every(i => markedCells.has(i))) count++; }
             if ([0,6,12,18,24].every(i => markedCells.has(i))) count++;
             if ([4,8,12,16,20].every(i => markedCells.has(i))) count++;
             return count;
         }
 
         function newGame() {
-            clearProgress();
-            markedCells.clear();
-            localStorage.removeItem(ORDER_KEY);
-            initGrid();
-            document.getElementById('status').textContent = '🎲 Nowa losowa gra!';
+            clearProgress(); localStorage.removeItem(ORDER_KEY); initGrid(); document.getElementById('status').textContent = '🎲 Nowa losowa gra!';
         }
 
         function updateStatus() {
-            const markedCount = markedCells.size;
-            const statusEl = document.getElementById('status');
-            if (markedCount === TOTAL_CELLS + 1) {
-                statusEl.innerHTML = '🏆 DZIĘKUJĘ CI ZA TĘ GRĘ! Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆';
-                statusEl.className = 'status full-bingo';
-            } else {
-                statusEl.textContent = markedCount >= 12 ? `Zaznaczono ${markedCount-1} pól (FREE)` : 'Zaznaczaj frazy!';
+            const markedCount = markedCells.size; const statusEl = document.getElementById('status');
+            if (markedCount === TOTAL_CELLS + 1) { statusEl.innerHTML = '🏆 DZIĘKUJĘ CI ZA TĘ GRĘ! Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆'; statusEl.className = 'status full-bingo'; }
+            else { statusEl.textContent = markedCount >= 12 ? `Zaznaczono ${markedCount-1} pól (FREE)` : 'Zaznaczaj frazy!'; }
+        }
+
+        // Pełna loadProgress
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                markedCells = new Set(JSON.parse(saved));
+                document.querySelectorAll('.cell').forEach(cell => {
+                    const index = parseInt(cell.dataset.index);
+                    if (markedCells.has(index)) { cell.classList.add('marked'); }
+                });
+                updateStatus();
             }
         }
 
