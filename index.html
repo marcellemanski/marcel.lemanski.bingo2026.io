@@ -113,7 +113,7 @@
 <body>
     <div class="container">
         <h1>🎰🎲 Tapflo BINGO 2026 🎯<br>🔥 Spotkanie Kwartalne 🎪</h1>
-        <div class="status" id="status">Gotowy do gry! Zaznaczaj frazy...</div>
+        <div class="status" id="status">Zaznaczaj zasłyszane teksty - każda pełna linia wygrywa. Nagroda specjalna za trafienie wszystkiego.</div>
         <div class="bingo-grid" id="grid"></div>
         <div class="controls">
             <button onclick="newGame()">🎲 Nowa Gra</button>
@@ -125,12 +125,11 @@
         // Skrypt bez zmian - tylko createCell dostosowany do .text-wrap
         const phrases = [
             "Musimy działać bardziej proaktywnie w tym obszarze.",
-            "Wykorzystajmy nasze core kompetencje i synergię między działami.",
+            "Musimy stworzyć synergię między działami.",
             "To jest temat strategiczny z perspektywy zarządu.",
-            "Potrzebujemy lepszej egzekucji i dowiezienia rezultatów.",
-            "Zastanówmy się, jak możemy to zeskalić na inne rynki.",
+            "Potrzebujemy dowiezienia rezultatów.",
+            "Zastanówmy się, jak możemy to zeskalować na inne rynki.",
             "Musimy podejść do tego bardziej holistycznie.",
-            "Zróbmy deep dive i wrócimy z konkretną rekomendacją.",
             "To jest temat, który realnie może przesunąć nam wskazówkę na wynikach.",
             "Na ten moment zostawmy to, do tematu wrócimy w kolejnym kwartale.",
             "Dziękuję Ci za to pytanie.",
@@ -149,6 +148,7 @@
 			"test1",
 			"test2",
 			"test3",
+			"test4",
         ];
 
         let markedCells = new Set();
@@ -253,7 +253,7 @@
         function updateStatus() {
             const markedCount = markedCells.size; const statusEl = document.getElementById('status');
             if (markedCount === TOTAL_CELLS + 1) { statusEl.innerHTML = '🏆 DZIĘKUJĘ CI ZA TĘ GRĘ! Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆'; statusEl.className = 'status full-bingo'; }
-            else { statusEl.textContent = markedCount >= 12 ? `Zaznaczono ${markedCount-1} pól (FREE)` : 'Zaznaczaj frazy!'; }
+            else { statusEl.textContent = markedCount >= 12 ? `Zaznaczono ${markedCount-1} pól (FREE)` : 'Dziękuję Ci za to zaznaczenie, graj dalej.'; }
         }
 
         // Pełna loadProgress
