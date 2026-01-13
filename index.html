@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
@@ -177,28 +178,64 @@
 
         /**
          * Dynamiczne zmniejszanie fontu aż tekst się zmieści w kontenerze
+         * Obsługuje też szerokość i wysokość jednocześnie
          */
         function fitTextToCell(textEl) {
             const container = textEl.parentElement;
+            const cell = container.parentElement;
+            const cellSize = cell.getBoundingClientRect();
+            
+            // Zmniejsz padding by maksymalizować dostępne miejsce
+            const padding = 4;
+            const maxWidth = cellSize.width - padding;
+            const maxHeight = cellSize.height - padding;
+            
             let fontSize = 12;
             textEl.style.fontSize = fontSize + 'px';
             
-            // Iteracyjnie zmniejsz font, aż tekst się zmieści
-            let maxAttempts = 50;
-            while (textEl.scrollHeight > container.clientHeight && maxAttempts > 0) {
-                fontSize -= 0.5;
-                textEl.style.fontSize = fontSize + 'px';
-                maxAttempts--;
+            // Sprawdzaj zarówno overflow wysokości jak i szerokości
+            let attempts = 0;
+            const maxAttempts = 100;
+            
+            while (attempts < maxAttempts) {
+                const rect = textEl.getBoundingClientRect();
+                const styles = getComputedStyle(textEl);
+                const scrollHeight = textEl.scrollHeight;
+                const scrollWidth = textEl.scrollWidth;
+                
+                // Jeśli nie mieści się w wysokości lub szerokości
+                if (scrollHeight > maxHeight || scrollWidth > maxWidth) {
+                    fontSize -= 0.25;
+                    if (fontSize < 5) {
+                        fontSize = 5;
+                        break;
+                    }
+                    textEl.style.fontSize = fontSize + 'px';
+                    attempts++;
+                } else {
+                    break;
+                }
             }
             
-            // Dla wolnego pola dostosuj inaczej
+            // Dla wolnego pola - nieco większy font
             if (textEl.textContent.includes('WOLNY')) {
-                fontSize = 13;
+                fontSize = 14;
                 textEl.style.fontSize = fontSize + 'px';
-                while (textEl.scrollHeight > container.clientHeight && maxAttempts > 0) {
-                    fontSize -= 0.5;
-                    textEl.style.fontSize = fontSize + 'px';
-                    maxAttempts--;
+                let attempts2 = 0;
+                while (attempts2 < maxAttempts) {
+                    const scrollHeight = textEl.scrollHeight;
+                    const scrollWidth = textEl.scrollWidth;
+                    if (scrollHeight > maxHeight || scrollWidth > maxWidth) {
+                        fontSize -= 0.25;
+                        if (fontSize < 6) {
+                            fontSize = 6;
+                            break;
+                        }
+                        textEl.style.fontSize = fontSize + 'px';
+                        attempts2++;
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -224,8 +261,10 @@
             cell.appendChild(textWrap);
             
             // Czekaj, aż element będzie w DOM, potem dostosuj
+            // Wielokrotne wywołania by upewnić się, że font jest dostosowany na wszystkich urządzeniach
             requestAnimationFrame(() => {
                 fitTextToCell(textWrap);
+                setTimeout(() => fitTextToCell(textWrap), 100);
             });
             
             return cell;
