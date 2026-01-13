@@ -126,27 +126,26 @@
 
     <script>
         const phrases = [
-            "Musimy działać bardziej proaktywnie w tym obszarze.",
             "synergia",
-            "To jest temat strategiczny z perspektywy zarządu.",
-            "Potrzebujemy dowiezienia rezultatów.",
-            "Zastanówmy się, jak możemy to zeskalować na inne rynki.",
-            "Na ten moment zostawmy to, do tematu wrócimy w kolejnym kwartale.",
-            "Dziękuję Ci za to pytanie.",
-            "A który to Andrzej?",
-            "Mam pytanie, tak spontanicznie.",
-            "I co tam? Jesz?",
+            "strategiczny temat dla zarządu.",
+            "dowiezienie rezultatów.",
+            "zeskalować na inne rynki.",
+            "wrócimy do tematu w kolejnym kwartale.",
+            "dziękuję Ci za to pytanie.",
+            "a który to Andrzej?",
+            "mam pytanie, tak spontanicznie.",
+            "i co tam? Jesz?",
             "Krawiec zadaje pytanie po polsku do CEO",
             "Daniel 'sprzedałem ostatnio CTX-a'",
             "Koliński narzeka za zbyt duży budżet",
             "Białystok ma za duży budżet",
-            "KWASIAK",
+            "kwasiak",
             "mapowanie procesów",
             "tego nie da się sprzedawać",
             "ewolucja a nie rewolucja",
             "konkurencja ma taniej",
-            "Jaka branża?",
-            "Firma naszych byłych kolegów...",
+            "jaka branża?",
+            "firma naszych byłych kolegów...",
             "Łańcuch dostaw",
             "Zysk operacyjny",
             "podziękulski",
@@ -179,6 +178,7 @@
         /**
          * Dynamiczne zmniejszanie fontu aż tekst się zmieści w kontenerze
          * Obsługuje też szerokość i wysokość jednocześnie
+         * Bez minimalnej wielkości fontu
          */
         function fitTextToCell(textEl) {
             const container = textEl.parentElement;
@@ -195,21 +195,15 @@
             
             // Sprawdzaj zarówno overflow wysokości jak i szerokości
             let attempts = 0;
-            const maxAttempts = 100;
+            const maxAttempts = 200;
             
             while (attempts < maxAttempts) {
-                const rect = textEl.getBoundingClientRect();
-                const styles = getComputedStyle(textEl);
                 const scrollHeight = textEl.scrollHeight;
                 const scrollWidth = textEl.scrollWidth;
                 
                 // Jeśli nie mieści się w wysokości lub szerokości
                 if (scrollHeight > maxHeight || scrollWidth > maxWidth) {
                     fontSize -= 0.25;
-                    if (fontSize < 5) {
-                        fontSize = 5;
-                        break;
-                    }
                     textEl.style.fontSize = fontSize + 'px';
                     attempts++;
                 } else {
@@ -227,10 +221,6 @@
                     const scrollWidth = textEl.scrollWidth;
                     if (scrollHeight > maxHeight || scrollWidth > maxWidth) {
                         fontSize -= 0.25;
-                        if (fontSize < 6) {
-                            fontSize = 6;
-                            break;
-                        }
                         textEl.style.fontSize = fontSize + 'px';
                         attempts2++;
                     } else {
