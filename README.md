@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
@@ -130,12 +129,25 @@
             "To jest temat strategiczny z perspektywy zarządu.",
             "Potrzebujemy lepszej egzekucji i dowiezienia rezultatów.",
             "Zastanówmy się, jak możemy to zeskalić na inne rynki.",
-            "Musimy podejść do tego bardziej holistycznie, nie w silosach.",
+            "Musimy podejść do tego bardziej holistycznie.",
             "Zróbmy deep dive i wrócimy z konkretną rekomendacją.",
             "To jest temat, który realnie może przesunąć nam wskazówkę na wynikach.",
             "Na ten moment zostawmy to, do tematu wrócimy w kolejnym kwartale.",
-            "Dziękuję Ci za to pytanie",
-            "test","test","test","test","test","test","test","test","test","test","test","test","test","test"
+            "Dziękuję Ci za to pytanie.",
+            "A który to Andrzej?",
+            "Mam pytanie, tak spontanicznie.",
+            "I co tam? Jesz?",
+            "Krawiec zadaje pytanie po polsku do CEO",
+            "Daniel 'sprzedałem ostatnio CTX-a'",
+            "Koliński narzeka za zbyt duży budżet",
+            "Białystok ma za duży budżet",
+            "KWASIAK",
+            "mapowanie procesów",
+            "tego nie da się sprzedawać",
+            "ewolucja a nie rewolucja",
+            "konkurencja ma taniej",
+            "test",
+            "test"
         ];
 
         let markedCells = new Set();
