@@ -157,6 +157,8 @@
 			"Kłodek: 'u mojego syna w pracy..'",
 			"Orzeł mówiący za kulisami, że ETO to debile a na forum ściska dłoń PK",
 			"kupywać",
+			"klient nigdzie indziej nie kupi",
+			"dwutorowo",
         ];
 
         let markedCells = new Set();
@@ -335,7 +337,7 @@
                 statusEl.innerHTML = '🏆 <strong>DZIĘKUJĘ CI ZA TĘ GRĘ!</strong><br>Wygrywasz CTX-a i roczny wjazd na Podlasie! 🏆'; 
                 statusEl.className = 'status full-bingo'; 
             } else if (bingos > 0) { 
-                statusEl.innerHTML = `🎉 BINGO! ${bingos} linii! 🎉`; 
+                statusEl.innerHTML = `🎉 BINGO! ${bingos} linii! Dla mnie się to podoba!🎉`; 
                 statusEl.className = 'status bingo-text'; 
             } else { 
                 statusEl.textContent = 'Jeszcze nie ma BINGO...'; 
@@ -363,7 +365,7 @@
             clearProgress(); 
             localStorage.removeItem(ORDER_KEY); 
             initGrid(); 
-            document.getElementById('status').textContent = '🎲 Nowa losowa gra!';
+            document.getElementById('status').textContent = '🎲 Nowa losowa gra! Pola i hasła zostały zresetowane.';
         }
 
         function updateStatus() {
